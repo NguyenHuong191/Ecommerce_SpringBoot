@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+       th:replace="~{base::Layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+   <section>
+   <!-- user controller -->
+      <div class="container mt-5 p-5">
+         <div class="col-md-10 offset-md-1">
+           <div class="card">
+              <div class="card-body">
+                 <p class="fs-3 text-center">My Profile</p>
+                 <th:block th:if=${succMsg}>
+                  <p class="text-success fw-bold mt-3 text-center">[[${succMsg}]]</p>
+                 </th:block>
+                 <th:block th:if=${errorMsg}>
+                  <p class="text-danger fw-bold mt-3 text-center">[[${errorMsg}]]</p>
+                 </th:block>
+                 <div class="text-center">
+							<div class="position-relative d-inline-block">
+								<!-- Ảnh đại diện -->
+								<img th:src="@{'../img/profile_img/'+${userLogin.img}}" alt="Avatar"
+									class="rounded-circle img-fluid"
+									style="width: 100px; height: 100px; object-fit: cover;">
+							</div>
+                 </div>
+                 <!-- form update profile -->
+                <form id="changeProfile" action = "/profile/update-admin-profile" method="post" enctype="multipart/form-data" novalidate>
+                 <div class="col-md-6 offset-md-3 mt-4">
+                     <table class="table table-borderless">
+							<tbody>
+								<tr>
+									<th scope="row">Your name : </th>
+									<td>
+									   <input type="text" name="name" class="form-control" th:value="${userLogin.name}" required>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">Email : </th>
+									<td>
+									   <input type="email" name="email" class="form-control" th:value="${userLogin.email}" readonly >
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">Mobile phone : </th>
+									<td>
+									   <input type="tel" name="phone" class="form-control" th:value="${userLogin.phone}" required>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">Profile Image : </th>
+									<td>
+									   <input type="file" name="file" class="form-control" value="">
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">Address : </th>
+									<td>
+									   <input type="text" name="address" class="form-control" th:value="${userLogin.address}" required>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">City : </th>
+									<td>
+									   <input type="text" name="city" class="form-control" th:value="${userLogin.city}" required>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">State : </th>
+									<td>
+									   <input type="text" name="state" class="form-control" th:value="${userLogin.state}" required>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">Pincode : </th>
+									<td>
+									   <input type="number" name="pincode" class="form-control" th:value="${userLogin.pincode}" required>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">Role : </th>
+									<td>
+									   <input type="text" name="role" class="form-control" th:value="${userLogin.role}" readonly>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">Account status : </th>
+									<td>
+									   <input type="text" name="statusDisplay" class="form-control" th:value="${userLogin.isEnable ? 'Active' : 'Inactive'}" readonly>
+									   <input type="hidden" name="isEnable" th:value="${userLogin.isEnable}">
+									   <input type="hidden" th:value="${userLogin.id}" name="id">
+									</td>
+								</tr>
+								<tr>
+								   <td></td>
+								   <td class="">
+								     <button class="btn btn-success text-light" style="width:150px;">Update</button>
+								   </td>
+								   <td></td>
+								</tr>
+							</tbody>
+						</table>
+					
+                 </div>
+                 </form>
+			 </div>
+           </div>
+           <div class="col-md-10 offset-md-1 mt-1">
+           <div class="card" style="margin-top:70px;">
+             <div class="card-body">
+             <div class="row">
+               <p class="text-center fs-3">Change password</p>
+               <th:block th:if=${succMs}>
+                  <p class="text-success fw-bold mt-3 text-center">[[${succMs}]]</p>
+                 </th:block>
+                 <th:block th:if=${errorMs}>
+                  <p class="text-danger fw-bold mt-3 text-center">[[${errorMs}]]</p>
+                 </th:block>
+               <!-- form change password -->
+               <form id="changePassword" action = "/profile/change-admin-password" method="post" novalidate>
+                  <table class="table table-borderless">
+					<tbody>
+					   <tr>
+						 <th scope="row" class="text-center">Current password  : </th>
+						 <td>
+							<input type="password" name="currentPass" class="form-control" value="" required>
+						 </td>
+						</tr>
+					    <tr>
+						<th scope="row" class="text-center">New password  : </th>
+						<td>
+							<input id="pass" type="password" name="newPass" class="form-control" value="" required>
+						</td>
+						</tr>
+						<tr>
+						<th scope="row" class="text-center">Confirm password  : </th>
+						<td>
+							<input type="password" name="confirmPass" class="form-control" value="" required>
+						</td>
+						</tr>
+						<tr>
+							<td></td>
+						    <td class="">
+							   <button class="btn btn-success text-light" style="width:150px;">Update</button>
+							</td>
+							<td></td>
+						</tr>
+					</tbody>
+				  </table>
+				  </form>		
+             </div>
+             </div>
+             </div>
+           </div>
+         </div>
+      </div>
+   </section>
+
+</body>
+</html>

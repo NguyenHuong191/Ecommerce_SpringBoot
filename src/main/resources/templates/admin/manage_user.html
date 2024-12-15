@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+       th:replace="~{base::Layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>Manage users</title>
+</head>
+<body>
+    <section>
+    <div class="container-fluid mt-5 p-5">
+       <div style="width:300px; height:80px; margin-left:20px;">
+       <div class="row">
+              <div class="col">
+                 <a th:href="@{'/admin/users?type=1'}"
+                    th:classappend="${userType == 1 ? 'btn btn-sm btn-success disabled-link':'btn btn-sm btn-success'}">
+                    Manage Users</a>
+              </div>
+              <div class="col" style="margin-left:-50px;">
+                 <a th:href="@{@{'/admin/users?type=2'}}"
+                    th:classappend="${userType == 2 ? 'btn btn-sm btn-success disabled-link':'btn btn-sm btn-success'}">
+                    Manage Admin</a>
+              </div>
+        </div>
+       </div>
+      <div class="card card-sh">
+         <div class="card-header text-center">
+            <p class="fs-4" th:text="${userType==1 ? 'Users' : 'Admin'}"></p>
+          
+            <th:block th:if=${succMsg}>
+                  <p class="text-success fs-6 fw-bold">[[${succMsg}]]</p>
+               </th:block>
+               <th:block th:if=${errorMsg}>
+                  <p class="text-danger fs-6 fw-bold">[[${errorMsg}]]</p>
+               </th:block>
+               
+         </div>
+         
+         <div class="card-body">
+            <table class="table table-hover">
+              <thead>
+                 <tr>
+                   <th scope="col">S1 No</th>
+                   <th scope="col">Name</th>
+                   <th scope="col">Email</th>
+                   <th scope="col">Mobile Number</th>
+                   <th scope="col">Address</th>
+                   <th scope="col">Pincode</th>
+                   <th scope="col">Status</th>
+                   <th scope="col">Update status for user</th>
+                 </tr>
+              </thead>
+              <tbody>
+                <tr th:each="u, c:${users}">
+                   <th scope="row">[[${c.count}]]</th>
+                    <td>
+                        [[${u.name}]]
+                        <span th:if="${u.email == userLogin.email}" class="text-primary">(You)</span>
+                    </td>
+                    <td>[[${u.email}]]</td>
+                    <td>[[${u.phone}]]</td>
+                    <td>[[${u.address + ', ' + u.city + ', ' + u.state}]]</td>
+                    <td>[[${u.pincode}]]</td>
+                    <td th:text="${u.isEnable} ? 'Active' : 'Inactive' "></td>
+                    
+                    <!-- edit btn -->
+                   <td>
+                      <!-- chuyen huong xu ly ve manageUserControl -->
+                      <a th:href="@{'/admin/users/updateUserStt?stt=true&uid='+${u.id}}+'&type='+${userType}"
+                         th:class="${u.email == userLogin.email ? 'btn btn-sm btn-success disabled-link' : 'btn btn-sm btn-success'}">
+                         Active</a>
+                   <!-- delete button -->
+                      <a th:href="@{'/admin/users/updateUserStt?stt=false&uid='+${u.id}}+'&type='+${userType}"
+                         th:class="${u.email == userLogin.email ? 'btn btn-sm btn-secondary disabled-link' : 'btn btn-sm btn-secondary'}">
+                         Inactive</a>
+                    
+                   </td>
+                    </tr>
+              </tbody>
+           </table>
+           
+           
+         </div>
+      </div>
+      </div>
+    </section>
+
+</body>
+</html>

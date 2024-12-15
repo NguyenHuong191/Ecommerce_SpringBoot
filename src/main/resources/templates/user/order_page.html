@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+       th:replace="~{base::Layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+    <section>
+    <div class="container mt-5 p-5">
+       <form id="orders" action="/user/save-orders" method="post" novalidate>
+        <div class="row align-items-center"> 
+          <div class="col-md-6 ">
+            <p class="text-center fs-4 fw-bold">Fill address</p>
+        
+           <div class="mb-4 row">
+            <div class="col p-1">
+            <label>Name</label>
+           <input type="text" name = "name" placeholder="" class="form-control mt-1" required th:value="${userLogin.name}">
+           </div>
+           </div>
+           
+           <div class="mb-4 row">
+            <div class="col p-1">
+            <label>Email</label>
+           <input type="email" name = "email" placeholder="" class="form-control col" required th:value="${userLogin.email}" readonly>
+            </div>
+            <div class="col p-1">
+            <label>Mobile phone</label>
+           <input type="tel" name = "phone" placeholder="" class="form-control col ms-2" required th:value="${userLogin.phone}">
+           </div>
+           </div>
+           
+           <div class="mb-4 row">
+            <div class="col p-1">
+            <label>Address</label>
+           <input type="text" name = "address" placeholder="" class="form-control col" required th:value="${userLogin.address}">
+           </div>
+            <div class="col p-1">
+            <label>City</label>
+           <input type="text" name = "city" placeholder="" class="form-control col ms-2" required th:value="${userLogin.city}">
+           </div>
+           </div>
+           
+           <div class="mb-4 row">
+            <div class="col p-1">
+            <label>State</label>
+           <input type="text" name = "state" placeholder="" class="form-control col" required th:value="${userLogin.state}">
+           </div>
+            
+           </div>
+           
+        </div>
+        <div class="col-md-6">
+        <p class="fs-4 text-center fw-bold">Payment Type</p>
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-borderless">
+              <tbody>
+                <tr>
+                   <td>Total quantity : </td>
+                   <td>[[${totalQuantity}]]</td>
+                </tr>
+                <tr>
+                   <td>Total price : </td>
+                   <td>đ [[${orderPrice}]]</td>
+                </tr>
+                <tr>
+                   <td>Delivery fee : </td>
+                   <td>đ 40</td>
+                </tr>
+                <tr>
+                   <td>Tax : </td>
+                   <td>đ 0</td>
+                </tr>
+                <tr class="fw-bold">
+                   <td>Total Order Price : </td>
+                   <td>đ [[${totalOrderPrice}]]</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+          <div class="card">
+            <div class="card-body">
+                <div class="mb-3">
+                   <label class="form-label">Select payment type</label>
+                     <select class="form-control" name="paymentType" required>
+                      <option value="COD">Cash on Delivery</option>
+                      <option value="Banking">Banking</option>
+                    </select>
+                </div>
+               
+                <button type="submit" class="btn bg-primary text-black col-md-12">Order</button>
+            </div>
+           
+          </div>
+        </div>
+       </div>
+       </form> 
+    </div>
+    </section>
+
+</body>
+</html>

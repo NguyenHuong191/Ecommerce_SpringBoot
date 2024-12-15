@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+       th:replace="~{base::Layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>My orders</title>
+</head>
+<body>
+     <section>
+       <div class="container mt-5 p-5">
+         <div class="row">
+         <p class="text-center fs-4 fw-bold">My Orders</p>
+               <th:block th:if=${succMsg}>
+                  <p class="text-success fw-bold text-center">[[${succMsg}]]</p>
+               </th:block>
+               <th:block th:if=${errorMsg}>
+                  <p class="text-danger fw-bold text-center">[[${errorMsg}]]</p>
+               </th:block>
+           <div class="col-md-12 mt-3">
+             <table class="table table-bordered">
+              <thead class="thead-dark">
+                  <tr>
+                     <th scope="col">Order code</th>
+                     <th scope="col">Date</th>
+                     <th scope="col">Product details</th>
+                     <th scope="col">Quantity</th>
+                     <th scope="col">Price/1 product</th>
+                     <th scope="col">Total price</th>
+                     <th scope="col">Status</th>                     
+                     <th scope="col">Action</th>
+                 </tr>
+              </thead>
+                <tbody>
+               <tr th:each="o:${orders}">
+               <th scope="row">[[${o.orderId}]]</th>
+                   <td>[[${o.orderDate}]]</td>
+                   <td>[[${o.product.name}]]</td>
+                   <td>[[${o.quantity}]]</td>
+                   <td>[[${o.price}]]</td>
+                   <td>[[${o.quantity * o.price}]]</td>
+                   <td>[[${o.status}]]</td>
+                   <!-- neu trang thai don hang la in progress thi duoc huy-->
+                   <th:block th:if="${o.status.equals('In Progress')}">
+                   <td><a th:href="@{'/user/update-status?id='+${o.id}+'&st=6'}" class="btn btn-sm btn-danger">Cancel</a></td>
+                   </th:block>
+                   <!-- neu k phai la in progress thi k duoc huy -->
+                  <th:block th:unless="${o.status.equals('In Progress')}">
+                   <td><a href="#" class="btn btn-sm btn-danger disabled">Cancel</a></td>
+                   </th:block>
+                   </tr>
+    
+              </tbody>
+            </table>
+
+           </div>
+         </div>
+       </div>
+     </section>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+       th:replace="~{base::Layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>My orders</title>
+</head>
+<body>
+     <section>
+       <div class="container-fluid mt-5">
+         <div class="row">
+         <p class="text-center fs-4 fw-bold mt-5">All Of Orders</p><hr>
+               <th:block th:if=${succMsg}>
+                  <p class="text-success fw-bold text-center">[[${succMsg}]]</p>
+               </th:block>
+               <th:block th:if=${errorMsg}>
+                  <p class="text-danger fw-bold text-center">[[${errorMsg}]]</p>
+               </th:block>
+               
+             
+               <!-- form tim kiem -->
+               <div class="col-md-3">
+               
+                  <div class="card card-sh">
+                    <div class="card-header text-center "> 
+                     <p class="fs-4">Search order</p>
+                    </div>
+                    
+                   <div class="card-body">                  
+                    <form action="/admin/orders/search" method="get">
+                       <div class="mb-3">
+                         <input type="text" class="form-control" name="searchText" placeholder="Enter order you want to search">                
+                       </div>    
+                  <button class="btn btn-primary col-md-12 mt-3">Search</button>
+                   </form>
+                </div>
+             </div>
+         </div>
+         <!-- end of search -->
+           
+           <div class="col-md-9">
+             <table class="table table-bordered">
+              <thead class="thead-dark">
+                  <tr>
+                     <th scope="col">Order code</th>
+                     <th scope="col">Order Details</th>
+                     <th scope="col">Date Order</th>
+                     <th scope="col">Product details</th>
+                     <th scope="col">Quantity</th>
+                     <th scope="col">Total price</th>
+                     <th scope="col">Status</th>                     
+                     <th scope="col">Action</th>
+                 </tr>
+              </thead>
+                <tbody>
+                <th:block th:if="${orders != null and orders.size() > 0}">
+               <tr th:each="o:${orders}">
+               <th scope="row">[[${o.orderId}]]</th>
+                   <td>
+                     - Orderer: [[${o.orderAddress.name}]] <br>
+                     - Mobile phone: [[${o.orderAddress.mobilePhone}]] <br>
+                     - Address: [[${o.orderAddress.address}]], [[${o.orderAddress.city}]], [[${o.orderAddress.state}]] <br>  
+                   </td>
+                   <td>[[${o.orderDate}]]</td>
+                   <td>[[${o.product.name}]]</td>
+                   <td>[[${o.quantity}]]</td>
+                   <td> - Quantity: [[${o.quantity}]]<br>
+                        - Price: [[${o.price}]]<br>
+                        - Total price: [[${o.quantity * o.price}]]</td>
+                   <td>[[${o.status}]]</td>
+                   <td>
+                       <!-- cap nhat trang thai don hang -->
+                       <form action="/admin/orders/update-order-status" method="post" id="statusForm">
+                         <div class="row mb-2">
+                           <div class="col-12">
+                              <select id="selectStt" class="form-control" name="st">
+                                 <option value="0">---select----</option>
+                                 <option value="1">In progress</option>
+                                 <option value="2">Order received</option>
+                                 <option value="3">Product Packed</option>
+                                 <option value="4">Out for delivery </option>
+                                 <option value="5">Delivered</option>
+                                 <option value="6">Cancelled</option>                                 
+                              </select>
+                              </div>
+                           </div>
+                              <input th:value="${o.id}" name="id" type="hidden">
+                               <!-- neu trang thai don hang la cancel hoac la delivered thi kh duoc update nua-->
+                            <div class="row">  
+                               <div class="col-12">
+                                   <th:block th:if="${o.status == 'Delivered' || o.status == 'Cancelled'}">
+                                       <button class="btn btn-primary btn-sm col disabled">Update</button>
+                                   </th:block>
+                               <!-- neu kh phai -->
+                                   <th:block th:if="${o.status != 'Delivered' && o.status != 'Cancelled'}">
+                                       <button type="submit" class="btn btn-primary btn-sm ">Update</button>
+                                   </th:block>
+                                  <div id="errorMsg" class="text-danger" style="display:none;"></div>
+                                </div>
+                           </div>
+                       </form>
+                       
+                       <script>
+                       document.getElementById("statusForm").addEventListener("submit", function (event) {
+                        	  const status = document.getElementById('selectStt').value;
+                        	  const errorElement = document.getElementById("errorMsg");
+                        	  
+                        	  if (status === "0") {
+                        		  errorElement.innerHTML = "Please select an status to update!"; // Hiển thị lỗi
+                                  errorElement.style.display = "block";
+                                  event.preventDefault();
+                              }else{
+                            	  errorElement.style.display = "none";
+                              }
+                           });
+                       </script>
+                   </td>
+                   </tr>
+                   </th:block>
+              </tbody>
+            </table>
+                <th:block th:if="${orders == null or orders.size() == 0}">
+                       <p class="fs-4 text-center text-secondary">Don't have any order matches with your text search!</p>
+                   </th:block>
+           </div>
+         </div>
+       </div>
+     </section>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+       th:replace="~{base::Layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+    <section>
+       <div class="container card-sh" style="margin-top: 90px">
+           <div class="col-md-12" >
+             <div class="row">
+             <div class="col-md-6 text-center" style="margin-top:15px">
+                <img alt="" th:src="@{'/img/product_img/'+${product_detail.img}}" width="300px" height="450px">
+             </div>
+             
+             <!-- chi tiết sản phẩm -->
+             <div class="col-md-6" style="margin-top:30px">
+                          
+                <!-- thong bao -->
+                       <th:block th:if=${succMsg}>
+                         <p class="text-success fw-bold fs-4 ">[[${succMsg}]]</p>
+                       </th:block>
+                      <th:block th:if=${errorMsg}>
+                         <p class="text-danger fw-bold fs-4 ">[[${errorMsg}]]</p>
+                       </th:block>
+                <!-- end -->
+                               
+               <p class="fs-3">
+                  [[${product_detail.name}]] 
+               </p>
+              <p>
+                <span class = "fw-bold">Description: </span><br>
+                [[${product_detail.description}]]
+              </p>
+              <p>
+                <span class="fw-bold">Product details: </span><br>
+                Status: 
+                <th:block th:if="${product_detail.stock > 0}">
+                   <span class="badge bg-success">Avaiable</span>
+                </th:block>
+                <th:block th:if="${product_detail.stock <= 0}">                
+                <span class="badge bg-danger">Out of stock</span>
+                </th:block>
+                <br>
+                Category: [[${product_detail.category.name}]] <br>
+                Policy: 7 Days Replacement & Return
+              </p>
+              
+              <!-- price -->
+              <p class="fs-5 fw-bold">
+              Price: &nbsp; &nbsp; &nbsp; &nbsp;
+              đ
+              [[${product_detail.discountPrice}]]
+              <span class="fs-6 text-decoration-line-through text-secondary">[[${product_detail.price}]]</span>
+              <span class="fs-6 text-success">[[${product_detail.discount}]]% off</span>
+              </p>
+              
+              <!-- btn buy and add to cart-->
+              <!-- neu so luong ton kho > 0 -->
+             <th:block th:if="${product_detail.stock > 0}">
+                 
+                 <!-- chua dnhap  -->
+                  <th:block th:if="${userLogin==null}">
+                   <div class="row">
+                   <div class="col">
+                         <!-- addtocart o class userController, pid: product id, uid: user id -->
+                       <a href="/signin" class="btn btn-primary btn-block" >Add to cart</a>
+                       <a href="/signin" class="btn btn-success btn-block">Buy now</a>
+                  </div>
+               </div>
+               </th:block>
+                 
+                  <!-- dnhap roi va la user -->
+               <th:block th:if="${userLogin!=null and userLogin.role == 'ROLE_USER'}">
+                   <div class="row">
+                   <div class="col">
+                         <!-- addtocart o class userController, pid: product id, uid: user id -->
+                       <a th:href="@{'/user/addToCart?pid='+${product_detail.id}+'&uid='+${userLogin.id}}" class="btn btn-primary btn-block" >Add to cart</a>
+                       <a href="#" class="btn btn-success btn-block">Buy now</a>
+                  </div>
+               </div>
+               </th:block>
+                 
+                 <!-- neu la admin -->
+                 <th:block th:if="${userLogin!=null and userLogin.role == 'ROLE_ADMIN'}">
+                   <div class="row">
+                   <div class="col">
+                       <button class="btn btn-primary btn-block" disabled>Add to cart</button>
+                       <button class="btn btn-success btn-block" disabled>Buy now</button>
+                       <p class="text-danger">You can't use this feature because you're a admin!</p>
+                  </div>
+               </div>
+               </th:block>
+               
+               </th:block>
+               
+              <!-- btn out of stock --> 
+                <th:block th:if="${product_detail.stock <= 0}">             
+                  <button disabled class="btn btn-danger btn-block" >Out of stock</button>                
+                  </th:block>
+              
+              <!--  -->
+              <div class="row" style="margin-top:40px">
+               <div class="col-md-4 text-primary text-center p-2">
+                 <i class="fas fa-money-bill-wave fa-2x"></i>
+                 <p>Cash on delivery</p>
+               </div>
+               <div class="col-md-4 text-success text-center p-2">
+                 <i class="fas fa-undo-alt fa-2x"></i>
+                 <p>Return available</p>
+               </div>
+               <div class="col-md-4 text-danger text-center p-2">
+                 <i class="fas fa-truck-moving fa-2x"></i>
+                 <p>Free shipping</p>
+               </div>
+              </div>      
+             </div>
+           </div>
+         </div>
+       </div>
+    </section>
+
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Notification</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Please log in to use this feature!
+      </div>
+      <div class="modal-footer">
+        <a href="/signin" class="btn btn-primary">Log in</a>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

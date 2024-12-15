@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+       th:replace="~{base::Layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>Cart</title>
+</head>
+<body>
+    <section>
+    <div class="container-fluid mt-5 p-5">
+      <div class="card card-sh">
+         <div class="card-header text-center">
+            <p class="fs-4">Cart</p>
+         </div>
+         
+         <div class="card-body">
+            <table class="table">
+              <thead>
+                 <tr>
+                   <th scope="col">S1 No</th>
+                   <th scope="col">Product name</th>
+                   <th scope="col">Image</th>
+                   <th scope="col">Price</th>
+                   <th scope="col">Quantity</th>
+                   <th scope="col">Total Price</th>
+                 </tr>
+              </thead>
+              <tbody>
+              <!-- userController xu ly -->
+                <tr th:each="cart, c:${carts}">
+                   <th scope="row">[[${c.count}]]</th>
+                    <td>[[${cart.product.name}]]</td>
+                    <td>
+                      <img th:src="@{'/img/product_img/'+${cart.product.img}}" width="100px" height="100px"></td>
+                    <td>[[${cart.product.discountPrice}]]</td>
+                    <td>
+                     <!-- btn tang so luong -->
+                       <a th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+ ${cart.id}}"><i class="fa-solid fa-minus fa-sm text-secondary me-2"></i></a>
+                           [[${cart.quantity}]]
+                     
+                     <!-- btn giam so luong -->
+                       <a th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+ ${cart.id}}"><i class="fa-solid fa-plus fa-sm text-secondary ms-2"></i></a>
+                    </td>
+                    <td>[[${cart.totalPrice}]]</td>
+                   
+                   <!-- delete button -->
+                   <td>
+                      <a th:href="@{'/user/deleteFromCart?cid=' + ${cart.id}}">
+                         <i class="fa-solid fa-trash text-danger fa-1x"></i>
+                      </a>
+                   </td>
+                </tr>
+                <tr>
+                  <td colspan="4"></td>
+                  <td class="fw-bold">Total price</td>
+                  <td class="fw-bold">đ [[${totalCartPrice}]]</td>
+                </tr>
+              </tbody>
+           </table>
+           <div class="text-center" >
+             <a href="/user/orders" class="btn" style="background-color: #FFC3A5;">Payment >></a>
+           </div>
+           
+         </div>
+      </div>
+      </div>
+    </section>
+
+</body>
+</html>

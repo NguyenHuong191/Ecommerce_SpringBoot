@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+       th:replace="~{base::Layout(~{::section})}"><head>
+<meta charset="UTF-8">
+<title>Add category</title>
+</head>
+<body>
+   <section>
+     <div class="container-fluid p-5 mt-5">
+       <div class="row">
+         <div class="col-md-3">
+           <div class="card card-sh">
+             <div class="card-header text-center "> 
+             <p class="fs-4">Edit Category</p>
+               <th:block th:if=${succMsg}>
+                  <p class="text-success fw-bold mt-3">[[${succMsg}]]</p>
+               </th:block>
+               <th:block th:if=${errorMsg}>
+                  <p class="text-danger fw-bold mt-3">[[${errorMsg}]]</p>
+               </th:block>
+             </div>
+             <div class="card-body">
+             
+                  <!-- form add category -->
+                  
+               <form action="/admin/category/update" method="post" enctype="multipart/form-data">
+                 <input type="hidden" name="id" th:value="${cate.id}">
+                 <div class="mb-3">
+                    <label>Enter Name Of Category</label> 
+                    <input type="text" class="form-control" name="name" th:value="${cate.name}" required>                
+                 </div>
+                 
+                 <div class="mb-3">
+                    <label>Status</label> 
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" 
+                          value="true" name="isActive" id="active" th:checked="${cate.isActive==true}">
+                       <label class="form-check-label" for="flexRadioDefault1">
+                         Active
+                       </label>
+                   </div>
+                   <div class="form-check">
+                      <input class="form-check-input" type="radio" 
+                          value="false" name="isActive" id="inactive" th:checked="${cate.isActive==false}">
+                         <label class="form-check-label" for="flexRadioDefault2">
+                         Inactive
+                        </label>
+                     </div>
+                 </div>
+                 
+                 <div class="mb-3">
+                    <label>Upload Image</label> 
+                    <input type="file" class="form-control" name="file">                
+                 </div>
+                 <img th:src="@{'/img/category_img/'+${cate.img}}" width="100px" height="100px">
+                 <button class="btn btn-success col-md-12 mt-3">Update Category</button>
+               </form>
+             </div>
+           </div>
+         </div>
+         
+         <div class="col-md-8">
+          <div class="card card-sh">
+          <div class="card-header text-center fs-4">Category Details</div>
+            <div class="card-body">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                  <th scope="col">Sl No </th>
+                   <th scope="col">Category</th>
+                   <th scope="col">Status</th>
+                   <th scope="col">Image</th>
+                   <th scope="col">Action</th>
+                 </tr>
+               </thead>
+               <tbody>
+                   <!-- get các thuộc tính từ category -->
+                  <tr th:each="cat, c:${categorys}">
+                   <th scope="row">[[${c.count}]]</th>
+                   <td th:class="${cat.isActive} == false ? 'text-secondary' : ''">
+                     [[${cat.name}]]</td>                   
+                   <td th:text="${cat.isActive ? 'Active' : 'Inactive'}" th:class="${cat.isActive} == false ? 'text-secondary' : ''"></td>
+                   <!-- url hình ảnh -->
+                   <td>
+                      <img th:src="@{'/img/category_img/' + ${cat.img}}" width="100px" height="100px">
+                   </td>
+                   <!-- edit button -->
+                   <td>
+                      <a th:href="@{'/admin/category/edit/'+${cat.id}}"><i class="fa-solid fa-pen-to-square text-secondary fs-1x"></i></a></td>
+                   <!-- delete button -->
+                   <td>
+                      <a th:if="${cat.isActive} == true" 
+                         th:href="@{'/admin/category/delete/'+${cat.id}}">
+                         <i class="fa-solid fa-trash text-danger fa-1x">
+                   </i></a></td>
+                 </tr>
+             </tbody>
+             </table>
+             
+             <div class="row">
+         <div class="col-md-4">Total categories : [[${totalElement}]]</div>
+         <div class="col-md-6">
+			<nav aria-label="Page navigation example">
+				<ul class="pagination">
+					
+					<!-- href dua theo loai tim kiem hay chon danh muc -->
+					<li class="page-item" th:classappend="${isFirst}?'disabled':''">
+					<a class="page-link" aria-label="Previous" 
+					   th:href="@{'/admin/category/edit/'+ ${cate.id} + '?pageNo='+${pageNo - 1}}" > 
+					<span aria-hidden="true">&laquo;</span>
+					<span class="sr-only">Previous</span>
+					</a></li>
+					
+					<li th:each="i:${#numbers.sequence(1,totalPages)}" class="page-item" th:classappend="${pageNo+1==i}?'active':''">
+					   <a class="page-link" th:href="@{'/admin/category/edit/' + ${cate.id} +'?pageNo='+${i - 1}}">[[${i}]]</a>
+					</li>
+					
+					<li class="page-item" th:classappend="${isLast}?'disabled':''">
+					<a class="page-link" th:href="@{'/admin/category/edit/'+ ${cate.id} + '?pageNo='+${pageNo + 1}}" 
+					   aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+					<span class="sr-only">Next</span>
+					</a></li>
+				</ul>
+			</nav>
+		</div>
+		</div>
+            </div>
+          </div>
+         </div>
+                  
+       </div>
+     </div>
+   </section>
+</body>
+</html>
